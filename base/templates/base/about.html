@@ -1,0 +1,55 @@
+{% extends 'main.html' %}
+
+{% block content %}
+<div class="card-container">
+  <div class="main-card">
+    <h1 style="text-align: center;">About Us</h1>
+    <div class="sub-cards">
+      <div class="card-item">
+        <img
+          src="https://res.cloudinary.com/dzy2zn0mz/image/upload/v1698769947/SecurePixel/Images/card1.jpg"
+          alt="Secure Communication 1"
+        />
+        <br />
+        Ensure secure internal communication to protect sensitive company
+        information.
+      </div>
+      <div class="card-item">
+        <img
+          src="https://res.cloudinary.com/dzy2zn0mz/image/upload/v1698769945/SecurePixel/Images/card2.avif"
+          alt="Secure Communication 2"
+        />
+        <br />
+        Secure communication for classified government and military data.
+      </div>
+      <div class="card-item">
+        <img
+          src="https://res.cloudinary.com/dzy2zn0mz/image/upload/v1698769945/SecurePixel/Images/card3.jpg"
+          alt="Secure Communication 3"
+        />
+        <br />
+        Secure communication and data exchange in the supply chain to prevent
+        breaches or cyberattacks.
+      </div>
+
+    </div>
+
+    <div class="card-item">
+        <h2 style="text-align: center; font-size: 2.5rem;">Contact Us</h2>
+        <div style="text-align: center;">
+          <p>If you have any questions or would like to learn more, please reach out to us:</p>
+          <p>
+            <i class="fas fa-envelope"></i>
+            Email: <a href="mailto:admin2024@gmail.com">admin2024@gmail.com</a>
+          </p>
+          <p>
+            <i class="fas fa-phone"></i>
+            Phone: <a href="tel:+918937627890">+91 8937627890</a>
+          </p>
+        </div>
+      </div>
+  
+    <a href="{% url 'home' %}" class="link-arrow font-reg">Get started </a>
+  </div>
+</div>
+{% endblock content %}

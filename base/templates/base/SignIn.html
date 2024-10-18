@@ -1,0 +1,45 @@
+{% extends 'main.html' %} 
+
+{% block content %}
+
+<div class="container" id="container">
+  <div class="form-container sign-in-container">
+
+    <form method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+      <h1>Sign in</h1>
+      <span>or use your account</span></br>
+
+      <div class="input">
+            <input type="text" name="username" placeholder="Username">
+            <small class="text-warning">{{ form.username.errors }}</small>
+            <input type="password" name="password" placeholder="Password">
+            <small class="text-warning">{{ form.password.errors }}</small>
+      </div>
+      <a href="#" id="forgot_pass">Forgot your password ?</a>
+      <a href="index.html" class="signin_link">
+        <button class="signin_button" type="submit" value="Login">Signin</button>
+      </a>
+
+      {% if error_message %}
+          <div class="alert alert-warning my-4">{{ error_message }}</div>
+      {% endif %}
+    </form>
+  </div>
+
+
+  <div class="overlay-container">
+    <div class="overlay">
+      <div class="overlay-panel overlay-right">
+        <img
+          src="https://res.cloudinary.com/dzy2zn0mz/image/upload/v1698769946/SecurePixel/Images/Logo.png"
+          class="right_img"
+          alt="Logo"
+        />
+        <h1>Hello, User!</h1>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock content %}
