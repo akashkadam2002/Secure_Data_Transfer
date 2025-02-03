@@ -1,6 +1,6 @@
 from django.contrib import messages
 from django.shortcuts import render, redirect
-from .forms import EncodeImageForm, RegistrationForm, LoginForm
+from .forms import EncodeImageForm, DecodeImageForm, RegistrationForm, LoginForm
 from .models import steganography, UserRegistration
 from django.conf import settings
 
@@ -69,7 +69,7 @@ def logout_view(request):
 def home(request):
     return render(request, 'base/home.html')
 
-
+# About Page view
 def about(request):
     return render(request, 'base/about.html')
 
@@ -89,6 +89,43 @@ def encrypt_rail_fence(text, key):
         row = row + 1 if dir_down else row - 1
 
     result = ''.join(char for row in rail for char in row if char != '\n')
+    return result
+
+
+# Rail Fence Dec
+def decrypt_rail_fence(cipher, key):
+    rail = [['\n' for _ in range(len(cipher))] for _ in range(key)]
+    dir_down = False
+    row, col = 0, 0
+
+    for _ in range(len(cipher)):
+        if row == 0:
+            dir_down = True
+        if row == key - 1:
+            dir_down = False
+        rail[row][col] = '*'
+        col += 1
+        row = row + 1 if dir_down else row - 1
+
+    index = 0
+    for i in range(key):
+        for j in range(len(cipher)):
+            if rail[i][j] == '*' and index < len(cipher):
+                rail[i][j] = cipher[index]
+                index += 1
+
+    result = ''
+    row, col = 0, 0
+    for _ in range(len(cipher)):
+        if row == 0:
+            dir_down = True
+        if row == key - 1:
+            dir_down = False
+        if rail[row][col] != '*':
+            result += rail[row][col]
+            col += 1
+        row = row + 1 if dir_down else row - 1
+
     return result
 
 
@@ -132,7 +169,7 @@ def encode_image(request):
 
                 # Append password to encrypted message
                 encrypted += password
-                b_message = ''.join(format(ord(i), "08b") for i in encrypted)
+                b_message = ''.join(format(ord(i), "08b") for i in encrypted)  #convert it in binary string
                 req_pixels = len(b_message)
 
                 if req_pixels > (total_pixels * 3):
@@ -141,10 +178,11 @@ def encode_image(request):
 
                 index = 0
                 for p in range(total_pixels):
-                    for q in range(n):
+                    for q in range(n):   #color channel 0 for Red, 1 for Green, 2 for Blue
                         if index < req_pixels:
-                            array[p][q] = int(bin(array[p][q])[2:9] + b_message[index], 2)
+                            array[p][q] = int(bin(array[p][q])[2:9] + b_message[index], 2)  
                             index += 1
+
 
                 array = array.reshape(height, width, n)
                 enc_img = Image.fromarray(array.astype('uint8'), img.mode)
@@ -169,6 +207,79 @@ def encode_image(request):
         'success_message': success_message,
         'error_message': error_message
     })
+
+
+
+#decode Image
+def decode_image(request):
+    user = request.user
+    steg_records = steganography.objects.filter(receiver=user).order_by('-created')
+    message = ""
+    error_message = ""
+
+    if request.method == 'POST':
+        password = request.POST.get('password')
+        image_url = request.POST.get('image_url')
+
+        # Remove the extra '/stegoImages/' if present
+        image_url = image_url.replace('/stegoImages/stegoImages/', 'static/stegoImages/')
+
+        try:
+            image = File(open(image_url, 'rb'))
+            img = Image.open(image)
+            array = np.array(list(img.getdata()))
+
+            if img.mode == 'RGB':
+                n = 3
+            elif img.mode == 'RGBA':
+                n = 4
+
+            total_pixels = array.size // n
+
+            hidden_bits = ""
+            for p in range(total_pixels):
+                for q in range(0, 3):
+                    hidden_bits += (bin(array[p][q])[2:][-1])
+
+            hidden_bits = [hidden_bits[i:i+8] for i in range(0, len(hidden_bits), 8)]
+
+            hiddenmessage = ""
+            for i in range(len(hidden_bits)):
+                x = len(password)
+                if message[-x:] == password:
+                    break
+                else:
+                    message += chr(int(hidden_bits[i], 2))
+                    hiddenmessage = message
+
+            # Verify the pass
+            if password in message:
+                # Remove the pass and decrypt the message
+                decrypt = decrypt_rail_fence(hiddenmessage[:-x], 3)
+
+                # ASCII Decryption
+                decmsg = ""
+                for ch in decrypt:
+                    asc = ord(ch) - 3  # Subtract 3 from the ASCII code to decrypt
+                    dech = chr(asc)
+                    decmsg += dech
+
+                # Verify the password again
+                if password in hiddenmessage:
+                    message = decmsg
+                else:
+                    error_message = "You entered the wrong password. Please try again."
+            else:
+                error_message = "You entered the wrong password. Please try again."
+
+        except Exception as e:
+            error_message = str(e)
+
+        # if error occurs, return error msg and skip further processing - Corrected - 28th Oct
+        if error_message:
+            return render(request, 'base/decodeImg.html', {'error_message': error_message, 'steg_records': steg_records})
+
+    return render(request, 'base/decodeImg.html', {'message': message, 'error_message': error_message, 'steg_records': steg_records})
 
 
 # success view

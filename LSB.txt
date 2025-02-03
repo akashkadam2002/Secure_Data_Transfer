@@ -1,0 +1,30 @@
+encrypted += password
+b_message = ''.join(format(ord(i), "08b") for i in encrypted)  # convert to binary string
+req_pixels = len(b_message)
+
+
+
+Appends the password to the encrypted message.
+Converts the entire message (including the password) into a binary string representation.
+
+e.g.
+byte_data = b'Hi'
+binary_representation = ''.join(format(byte, '08b') for byte in byte_data)
+print(binary_representation)  # Output: '0100100001101001'
+
+--------------------------------------------------------
+ 
+            index = 0
+                for p in range(total_pixels):
+                    for q in range(n):   #color channel 0 for Red, 1 for Green, 2 for Blue
+                        if index < req_pixels:
+                            array[p][q] = int(bin(array[p][q])[2:9] + b_message[index], 2)  
+                            index += 1
+
+
+
+bin(array[p][q]): Converts the current color channel value (for the pixel at index p) to a binary string. For example, if the value is 100, bin(100) would return '0b1100100'.
+
+[2:9]: This slices the binary string to remove the '0b' prefix and captures the next 8 bits. This effectively gets the 8-bit representation of the pixel value. If the value is less than 256 (like 100), it gets something like '1100100', which is padded to 8 bits as '001100100'.
+
++ b_message[index]: The current bit from the binary message (from b_message) is appended to the sliced binary string. This effectively modifies the least significant bit (or a bit of your choice) of the pixel's binary representation.

@@ -25,12 +25,19 @@ class EncodeImageForm(forms.Form):
         if len(password) < 6:
             raise forms.ValidationError("Password must be at least 6 characters long.")
         return password
+    
+from django import forms
 
+class DecodeImageForm(forms.Form):
+    encoded_image = forms.ImageField(label="Select the image to decode: ")
+    password = forms.CharField(max_length=128, widget=forms.PasswordInput)
+
+    
 class RegistrationForm(UserCreationForm):
     profile_picture = forms.ImageField(required=False, label="Choose Profile Image")
     email = forms.CharField(
         label="Email",
-        widget=forms.TextInput(attrs={"placeholder": "johndoe@gmail.com"}),
+        widget=forms.TextInput(attrs={"placeholder": "akash@gmail.com"}),
     )
 
     def __init__(self, *args, **kwargs):

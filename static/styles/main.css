@@ -14,6 +14,7 @@
   max-height: 170px;
 }
 
+
 .custom-dest,
 .custom-receiver {
   border-radius: 5px;
@@ -36,10 +37,13 @@
   bottom: 0;
   width: 100%;
   background-color: #343a40;
+  /* Choose the background color you prefer */
   color: white;
+  /* Text color for the footer */
   text-align: center;
 }
 
+/* ----------------MAIN.CSS by AFTAB BEGINS---------------- */
 .logo {
   position: relative;
   width: 80px;
@@ -129,6 +133,7 @@ span {
 }
 
 /* Profile photo - DJ */
+/* Add styling for the profile image container */
 .profile-box {
   padding: 3px;
   display: inline-block;
@@ -138,6 +143,7 @@ span {
 }
 
 .profile-image {
+  /* filter: brightness(100); */
   width: 40px;
   height: 40px;
   border-radius: 50%;
@@ -248,7 +254,7 @@ span {
 
 .link-arrow::before,
 .link-arrow::after {
-  content: "->";
+  /* content: "-->"; */
   display: block;
   font-family: Inter;
   font-size: inherit;
@@ -346,6 +352,7 @@ form {
   display: flex;
   flex-direction: column;
   gap: 10px;
+  width: 100%;
 }
 
 input {
@@ -597,44 +604,4 @@ input {
   padding-bottom: 5px;
 }
 
-/* Media Queries for Responsiveness */
-
-/* For devices with a max-width of 768px (tablets and smaller) */
-@media (max-width: 768px) {
-  .main-card {
-    width: 90%; /* Full width on smaller screens */
-    padding: 2%; /* Reduced padding */
-  }
-
-  .sub-cards {
-    flex-direction: column; /* Stack cards vertically */
-    align-items: center; /* Center items */
-  }
-
-  .card-item {
-    flex-basis: 80%; /* Increase width of cards */
-    margin: 10px 0; /* Margin between stacked items */
-  }
-
-  .link-arrow {
-    width: 100%; /* Full width button */
-    text-align: center; /* Center text */
-    margin-top: 20px; /* Margin for spacing */
-  }
-}
-
-/* For devices with a max-width of 480px (mobile phones) */
-@media (max-width: 480px) {
-  .main-card h1 {
-    font-size: 2.5rem; /* Smaller font size */
-  }
-
-  .main-card p {
-    font-size: 0.9rem; /* Smaller font size for text */
-  }
-
-  .card-item img {
-    width: 60px; /* Smaller image size */
-    height: 60px; /* Smaller image size */
-  }
-}
+/*********************** SIGNUP end ***********************/
