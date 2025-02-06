@@ -10,7 +10,7 @@ class EncodeImageForm(forms.Form):
         widget=forms.PasswordInput, 
         help_text="Enter a password (at least 6 characters long)."
     )
-    dest = forms.CharField(initial="encoded_image.png", help_text="Specify the name for the encoded image.")
+    dest = forms.CharField(initial="encoded_image.png")
     receiver = forms.ModelChoiceField(queryset=User.objects.all(), label="Receiver")
 
     def __init__(self, *args, **kwargs):
@@ -26,13 +26,12 @@ class EncodeImageForm(forms.Form):
             raise forms.ValidationError("Password must be at least 6 characters long.")
         return password
     
-from django import forms
 
 class DecodeImageForm(forms.Form):
     encoded_image = forms.ImageField(label="Select the image to decode: ")
     password = forms.CharField(max_length=128, widget=forms.PasswordInput)
 
-    
+
 class RegistrationForm(UserCreationForm):
     profile_picture = forms.ImageField(required=False, label="Choose Profile Image")
     email = forms.CharField(
@@ -66,3 +65,7 @@ class LoginForm(forms.Form):
         super(LoginForm, self).__init__(*args, **kwargs)
         self.fields["username"].widget.attrs.update({"class": "custom-username"})
         self.fields["password"].widget.attrs.update({"class": "custom-password1"})
+
+
+class ForgotPasswordForm(forms.Form):
+    email = forms.EmailField(widget=forms.EmailInput(attrs={'placeholder': 'Enter your email'}))

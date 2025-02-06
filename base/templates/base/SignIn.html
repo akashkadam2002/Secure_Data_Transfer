@@ -16,7 +16,13 @@
             <input type="password" name="password" placeholder="Password">
             <small class="text-warning">{{ form.password.errors }}</small>
       </div>
+      <div class="form-group text-center">
+        <div class="col-12">
+          <small class="text-muted">Don't have an Account? <a href="{% url 'sign-up' %}">Sign up</a></small>
+        </div>
+      </div>
       <a href="#" id="forgot_pass">Forgot your password ?</a>
+
       <a href="index.html" class="signin_link">
         <button class="signin_button" type="submit" value="Login">Signin</button>
       </a>
