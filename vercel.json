@@ -1,6 +1,14 @@
 {
-    "version": 2,
-    "builds": [{ "src": "manage.py", "use": "@vercel/python" }],
-    "routes": [{ "src": "/(.*)", "dest": "manage.py" }]
-  }
+    "builds":[{
+      "src":"securePixel/wsgi.py",
+      "use":"@vercel/python",
+      "config":{"maxLambdaSize":"15mb", "runtime":"python3.12.1"}
+    }],
+    "routes":[
+      {
+        "src":"/(.*)",
+        "dest":"securePixel/wsgi.py"
+      }
+    ]
+}
   

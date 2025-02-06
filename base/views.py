@@ -397,4 +397,3 @@ def userLanding(request):
     for record in receiver_records:
         record.image_name = record.image.url.split("/")[-1]
     return render(request, 'base/userLanding.html', {'sent_records': sent_records, 'receiver_records': receiver_records, 'records_found_r': records_found_r, 'records_found_s': records_found_s })
-
