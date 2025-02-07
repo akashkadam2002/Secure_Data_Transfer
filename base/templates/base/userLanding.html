@@ -1,0 +1,121 @@
+{% extends 'main.html' %} {% block content %}
+
+<style>
+  .table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+  }
+
+  .table th, .table td {
+    padding: 12px;
+    text-align: center;
+    border: 1px solid #ddd;
+  }
+
+  .table th {
+    background-color: #343a40;
+    color: white;
+    font-weight: bold;
+  }
+
+  .table tbody tr:nth-child(even) {
+    background-color: #f2f2f2;
+  }
+
+  .table tbody tr:hover {
+    background-color: #ddd;
+  }
+
+  .btn-primary {
+    margin: 10px;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+  }
+
+  .text-center {
+    margin: 20px 0;
+  }
+
+  hr {
+    border: 1px solid #ccc;
+  }
+
+  p {
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+    margin-top: 20px;
+  }
+</style>
+
+<div style="margin:1%">
+  <hr>
+  <div class="text-center">
+    <a href="{% url 'encode-img' %}" class="btn btn-primary rounded-lg">Encode Image</a>
+    <a href="{% url 'decode-img' %}" class="btn btn-primary rounded-lg">Decode Image</a>
+  </div>
+  <hr>
+
+  <!-- -----------SENT LOGS TABLE BEGINS---------------- -->
+  <p>Sent logs</p>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Sent Image</th>
+        <th>Last modified</th>
+        <th>Receiver</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for record in sent_records %}
+        {% if request.user == record.sender %}
+          <tr>
+            <td>{{ record.image_name }}</td>
+            <td>{{ record.updated | timesince}}</td>
+            <td>{{ record.receiver }}</td>
+          </tr>
+        {% endif %}
+      {% endfor %}
+      {% if not records_found_s %}
+        <tr>
+          <td colspan="3">No records found</td>
+        </tr>
+      {% endif %}
+    </tbody>
+  </table>
+  <!-- -----------SENT LOGS TABLE END---------------- -->
+
+  <!-- -----------RECEIVED LOGS TABLE BEGINS---------------- -->
+  <p>Receiver logs</p>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Received Image</th>
+        <th>Last modified</th>
+        <th>Sender</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for record in receiver_records %}
+        {% if request.user == record.receiver %}
+          <tr>
+            <td>{{ record.image_name }}</td>
+            <td>{{ record.updated | timesince}}</td>
+            <td>{{ record.sender }}</td>
+          </tr>
+        {% endif %}
+      {% endfor %}
+      {% if not records_found_r %}
+        <tr>
+          <td colspan="3">No records found</td>
+        </tr>
+      {% endif %}
+    </tbody>
+  </table>
+  <!-- -----------RECEIVED LOGS TABLE END---------------- -->
+
+</div>
+
+{% endblock content %}
