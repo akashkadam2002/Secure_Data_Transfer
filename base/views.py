@@ -224,25 +224,99 @@ def encode_image(request):
 
     return render(request, 'base/encodeImg.html', {'form': form, 'success_message': success_message, 'error_message': error_message})
 
+# decode image view
+# def decode_image(request):
+#     user = request.user
+#     steg_records = steganography.objects.filter(receiver=user).order_by('-created')
+#     message = ""
+#     error_message = ""
+
+#     if request.method == 'POST':
+#         form = DecodeImageForm(request.POST, request.FILES)
+
+#         if form.is_valid():
+#             # encoded_image = request.FILES['encoded_image']
+#             # password = form.cleaned_data['password']
+#             password = request.POST.get('password')
+#             image_url = request.POST.get('image_url')
+
+#             try:
+#                 # img = Image.open(encoded_image)
+#                 # new line added
+#                 image = File(open(image_url, 'rb'))
+#                 img = Image.open(image)
+
+#                 array = np.array(list(img.getdata()))
+
+#                 if img.mode == 'RGB':
+#                     n = 3
+#                 elif img.mode == 'RGBA':
+#                     n = 4
+
+#                 total_pixels = array.size // n
+
+#                 hidden_bits = ""
+#                 for p in range(total_pixels):
+#                     for q in range(0, 3):
+#                         hidden_bits += (bin(array[p][q])[2:][-1])
+
+#                 hidden_bits = [hidden_bits[i:i+8] for i in range(0, len(hidden_bits), 8)]
+
+#                 hiddenmessage = ""
+#                 for i in range(len(hidden_bits)):
+#                     x = len(password)
+#                     if message[-x:] == password:
+#                         break
+#                     else:
+#                         message += chr(int(hidden_bits[i], 2))
+#                         hiddenmessage = message
+
+#                 # Verifying the password
+#                 if password in message:
+#                     # Remove the password and decrypt the message
+#                     decrypt = decrypt_rail_fence(hiddenmessage[:-x], 3)
+
+#                     # ASCII Decryption
+#                     decmsg = ""
+#                     for ch in decrypt:
+#                         asc = ord(ch) - 3  # Subtract 3 from the ASCII code to decrypt
+#                         dech = chr(asc)
+#                         decmsg += dech
+
+#                     # Verify the password again
+#                     if password in hiddenmessage:
+#                         message = decmsg
+#                     else:
+#                         error_message = "You entered the wrong password. Please try again."
+#                 else:
+#                     error_message = "You entered the wrong password. Please try again."
+
+#             except Exception as e:
+#                 error_message = str(e)
+#         else:
+#             error_message = "Form is not valid. Please check your inputs."
+
+#     else:
+#         form = DecodeImageForm()
+
+#     return render(request, 'base/decodeImg.html', {'form': form, 'message': message, 'error_message': error_message, 'steg_records': steg_records})
+
 
 def decode_image(request):
     user = request.user
     steg_records = steganography.objects.filter(receiver=user).order_by('-created')
-    decoded_messages = {}  # Dictionary to store decoded messages for each record
+    message = ""
     error_message = ""
 
     if request.method == 'POST':
         password = request.POST.get('password')
         image_url = request.POST.get('image_url')
 
+        # Remove the extra '/stegoImages/' if present
+        image_url = image_url.replace('/stegoImages/stegoImages/', 'static/stegoImages/')
+
         try:
-            # Find the specific record being decoded
-            record = steganography.objects.get(encoded_img=image_url.replace('/stegoImages/stegoImages/', 'stegoImages/'))
-            
-            # Remove the extra '/stegoImages/' if present
-            image_path = os.path.join(settings.MEDIA_ROOT, image_url.replace('/stegoImages/stegoImages/', 'stegoImages/'))
-            
-            image = File(open(image_path, 'rb'))
+            image = File(open(image_url, 'rb'))
             img = Image.open(image)
             array = np.array(list(img.getdata()))
 
@@ -260,7 +334,6 @@ def decode_image(request):
 
             hidden_bits = [hidden_bits[i:i+8] for i in range(0, len(hidden_bits), 8)]
 
-            message = ""
             hiddenmessage = ""
             for i in range(len(hidden_bits)):
                 x = len(password)
@@ -270,9 +343,9 @@ def decode_image(request):
                     message += chr(int(hidden_bits[i], 2))
                     hiddenmessage = message
 
-            # Verify the password
+            # Verify the pass
             if password in message:
-                # Remove the password and decrypt the message
+                # Remove the pass and decrypt the message
                 decrypt = decrypt_rail_fence(hiddenmessage[:-x], 3)
 
                 # ASCII Decryption
@@ -284,8 +357,7 @@ def decode_image(request):
 
                 # Verify the password again
                 if password in hiddenmessage:
-                    # Store the decoded message with the record ID as key
-                    decoded_messages[str(record.id)] = decmsg
+                    message = decmsg
                 else:
                     error_message = "You entered the wrong password. Please try again."
             else:
@@ -294,11 +366,13 @@ def decode_image(request):
         except Exception as e:
             error_message = str(e)
 
-    return render(request, 'base/decodeImg.html', {
-        'decoded_messages': decoded_messages,
-        'error_message': error_message, 
-        'steg_records': steg_records
-    })
+        # if error occurs, return error msg and skip further processing - Corrected - 28th Oct
+        if error_message:
+            return render(request, 'base/decodeImg.html', {'error_message': error_message, 'steg_records': steg_records})
+
+    return render(request, 'base/decodeImg.html', {'message': message, 'error_message': error_message, 'steg_records': steg_records})
+
+
 
 
 # success view
