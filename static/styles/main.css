@@ -254,15 +254,14 @@ span {
 
 .link-arrow::before,
 .link-arrow::after {
-  /* content: "-->"; */
-  display: block;
-  font-family: Inter;
-  font-size: inherit;
-  position: absolute;
-  top: 50%;
-  right: 32px;
-  transform: translate(0%, -50%);
-  transition: all 0.5s cubic-bezier(0.25, 0.25, 0.08, 1.08);
+    display: block;
+    font-family: Inter;
+    font-size: inherit;
+    position: absolute;
+    top: 50%;
+    right: 32px;
+    transform: translate(0%, -50%);
+    transition: all 0.5s cubic-bezier(0.25, 0.25, 0.08, 1.08);
 }
 
 .link-arrow.font-reg::before,

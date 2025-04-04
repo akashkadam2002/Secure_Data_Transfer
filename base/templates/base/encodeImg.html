@@ -1,109 +1,94 @@
-{% extends 'main.html' %} {% load static %} {% block content %}
+{% extends 'main.html' %} 
+{% load static %} 
+{% block content %}
+<link rel="stylesheet" href="{% static 'styles/sendform.css' %}">
 
-<div class="row align-items-center justify-content-around w-100">
-  <div class="col-md-6 d-flex justify-content-center">
-    <div class="card shadow rounded w-75">
-      {% if success_message %}
-      <div class="alert alert-success mb-3" role="alert">
-        {{ success_message }}
-      </div>
-      {% endif %} {% if error_message %}
-      <div class="alert alert-danger mb-3" role="alert">
-        {{ error_message }}
-      </div>
-      {% endif %}
-      <div class="card-header bg-primary text-white">
-        <div class="row align-items-center">
-          <div class="col-md-3">
-            <a href="{% url 'landing' %}">
-              <button class="btn btn-primary">
-                <i class="fa fa-chevron-left" aria-hidden="true"></i>
-              </button>
-            </a>
-          </div>
-          <div class="col-md-6 text-center">
-            <h4>SEND</h4>
-          </div>
-        </div>
-      </div>
-      <div class="card-body p-2">
-        <form method="post" enctype="multipart/form-data" style="background-color: #a9a9a925">
-          {% csrf_token %}
-
-          <div class="form-group row"></div>
-
-          <div class="form-group row">
-            <div class="col-sm-3 text-md-right">
-              <label for="{{ form.image.id_for_label }}">{{ form.image.label_tag }}</label>
-            </div>
-            <div class="col-sm-9">{{ form.image }} {{ form.image.errors }}</div>
-
-            <div class="col-sm-3 text-md-right mt-2">
-              <label for="{{ form.message.id_for_label }}">{{ form.message.label_tag }}</label>
-            </div>
-            <div class="col-sm-9 mt-2">
-              {{ form.message }} {{ form.message.errors }}
-            </div>
-
-            <div class="col-sm-3 text-md-right mt-2">
-              <label for="{{ form.password.id_for_label }}">{{ form.password.label_tag }}</label>
-            </div>
-            <div class="col-sm-9 mt-2">
-              {{ form.password }} {{ form.password.errors }}
-            </div>
-
-            <div class="col-sm-3 text-md-right mt-3">
-              <label for="{{ form.dest.id_for_label }}">{{ form.dest.label_tag }}</label>
-            </div>
-            <div class="col-sm-9 mt-3">{{ form.dest }}</div>
-
-            <div class="col-sm-3 text-md-right mt-3">
-              <label for="{{ form.receiver.id_for_label }}">{{ form.receiver.label_tag }}</label>
-            </div>
-            <div class="col-sm-3 mt-3">{{ form.receiver }}</div>
-          </div>
-
-          <div class="d-flex justify-content-between">
-            <!-- Go Back Button -->
-            <a href="{% url 'landing' %}">
-              <button class="btn btn-primary">
-                <i class="fa fa-chevron-left" aria-hidden="true"></i>
-                Go back
-              </button>
-            </a>
-            
-            <!-- Send Button -->
-            <div class="form-group text-center" style="margin-left: 80px;">
-              <button type="submit" class="btn btn-primary custom-button">
-                SEND
-                <i class="fa fa-paper-plane" aria-hidden="true"></i>
-              </button>
-            </div>
-          </div>
-        </form>
-      </div>
+<div class="encoding-container">
+  <div class="encoding-card">
+    {% if success_message %}
+    <div class="alert alert-success" role="alert">
+      <i class="fas fa-check-circle"></i>
+      {{ success_message }}
     </div>
-    {% comment %} <footer class="footer bg-dark text-white text-center py-3 mt-5">
-      All Right Reserved &copy; SecurePixel - 2024
-    </footer> {% endcomment %}
+    {% endif %}
+    
+    {% if error_message %}
+    <div class="alert alert-danger" role="alert">
+      <i class="fas fa-exclamation-circle"></i>
+      {{ error_message }}
+    </div>
+    {% endif %}
+
+    <div class="card-header">
+      <h4><i class="fas fa-lock"></i> Secure Message Encoding</h4>
+    </div>
+
+    <div class="card-body">
+      <form method="post" enctype="multipart/form-data" class="encoding-form">
+        {% csrf_token %}
+
+        <div class="form-group">
+          <label for="{{ form.image.id_for_label }}" class="form-label">
+            <i class="fas fa-image"></i>
+            {{ form.image.label }}
+          </label>
+          {{ form.image }}
+          {{ form.image.errors }}
+        </div>
+
+        <div class="form-group">
+          <label for="{{ form.message.id_for_label }}" class="form-label">
+            <i class="fas fa-comment-dots"></i>
+            {{ form.message.label }}
+          </label>
+          {{ form.message }}
+          <small class="form-text">Enter your secret message here</small>
+          {{ form.message.errors }}
+        </div>
+
+        <div class="form-group">
+          <label for="{{ form.password.id_for_label }}" class="form-label">
+            <i class="fas fa-key"></i>
+            {{ form.password.label }}
+          </label>
+          {{ form.password }}
+          {{ form.password.errors }}
+        </div>
+
+        <div class="form-group">
+          <label for="{{ form.dest.id_for_label }}" class="form-label">
+            <i class="fas fa-tag"></i>
+            {{ form.dest.label }}
+          </label>
+          {{ form.dest }}
+          {{ form.dest.errors }}
+        </div>
+
+        <div class="form-group">
+          <label for="{{ form.receiver.id_for_label }}" class="form-label">
+            <i class="fas fa-user-shield"></i>
+            {{ form.receiver.label }}
+          </label>
+          <div class="receiver-field">
+            {{ form.receiver }}
+          </div>
+          {% if form.receiver.errors %}
+            <div class="error-message" style="color: #dc3545; font-size: 0.85rem; margin-top: 0.5rem;">
+              {{ form.receiver.errors }}
+            </div>
+          {% endif %}
+        </div>
+
+        <div class="button-group">
+          <a href="{% url 'landing' %}" class="btn btn-outline-primary">
+            <i class="fas fa-arrow-left"></i> Go Back
+          </a>
+          <button type="submit" class="btn btn-primary">
+            <i class="fas fa-paper-plane"></i> Encode & Send
+          </button>
+        </div>
+      </form>
+    </div>
   </div>
 </div>
-{% endblock content %} {% block scripts %}
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
-<script>
-  document.addEventListener("DOMContentLoaded", function () {
-    const form = document.querySelector("form");
-    form.addEventListener("submit", function (event) {
-      event.preventDefault(); // Prevents the default form submission
-
-      Swal.fire({
-        icon: "success",
-        title: "Success!",
-        text: "Your message has been sent.",
-      }).then(() => {
-        form.submit(); // Submit the form after showing the Alert
-      });
-    });
-  });
-</script>
-{% endblock scripts %}
+{% endblock content %}

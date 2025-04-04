@@ -1,0 +1,166 @@
+/* General Styles */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f4f9;
+    margin: 0;
+    padding: 0;
+    color: #333;
+    line-height: 1.6;
+}
+.welcome-text {
+    text-align: center;
+    font-size: 1.4rem;
+    font-weight: 700; /* Increased weight */
+    color: rgb(35, 34, 36); /* Darker blue */
+    padding: 12px 20px;
+    border-radius: 8px;
+    max-width: 80%;
+    margin: 20px auto;
+    line-height: 1.6;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5); /* Adds slight depth */
+}
+
+
+
+.card-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.main-card {
+    background: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+    padding: 40px;
+    max-width: 1200px;
+    width: 100%;
+    text-align: center;
+    background-image: url('https://res.cloudinary.com/dzy2zn0mz/image/upload/v1698769945/SecurePixel/Images/card2.avif');
+    background-size: cover; /* Cover the entire container */
+    background-position: center; /* Center the background image */
+    background-repeat: no-repeat; /* Prevent repeating the image */
+    position: relative; /* Needed for the overlay */
+    overflow: hidden; /* Ensure the image doesn't overflow */
+}
+
+/* Overlay to make text readable */
+.main-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent white overlay */
+    z-index: 1; /* Place the overlay above the background image */
+}
+
+.main-card h1,
+.main-card .sub-cards,
+.main-card .link-arrow {
+    position: relative; /* Ensure content is above the overlay */
+    z-index: 2; /* Place content above the overlay */
+}
+
+.main-card h1 {
+    font-size: 2.5rem;
+    color: #2c3e50;
+    margin-bottom: 30px;
+    font-weight: 600;
+}
+
+.sub-cards {
+    display: flex;
+    justify-content: space-between;
+    gap: 30px;
+    margin-top: 40px;
+    flex-wrap: wrap; /* Allow cards to wrap on smaller screens */
+}
+
+.card-item {
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    padding: 25px;
+    flex: 1;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    min-width: 250px; /* Ensure cards don't get too small */
+}
+
+.card-item:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+}
+
+.card-item img {
+    width: 100%;
+    height: 200px; /* Fixed height for images */
+    object-fit: cover; /* Ensure images cover the area without distortion */
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.card-item p {
+    font-size: 1rem;
+    color: #555;
+    line-height: 1.6;
+    margin: 0;
+}
+.call-to-action {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px; /* Adjust margin as needed */
+}
+
+.link-arrow {
+    display: inline-block;
+    padding: 14px 30px;
+    background: linear-gradient(135deg, #3498db, #6dd5fa);
+    color: #ffffff;
+    border-radius: 10px;
+    font-size: 1.2rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.link-arrow:hover {
+    background: linear-gradient(135deg, #2980b9, #3498db);
+    transform: translateY(-4px);
+}
+
+.link-arrow i {
+    margin-left: 10px;
+    transition: margin-left 0.3s ease;
+}
+
+.link-arrow:hover i {
+    margin-left: 18px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .sub-cards {
+        flex-direction: column; /* Stack cards vertically on smaller screens */
+        gap: 20px;
+    }
+
+    .card-item {
+        width: 100%; /* Full width for cards on smaller screens */
+    }
+
+    .main-card h1 {
+        font-size: 2rem; /* Smaller heading for smaller screens */
+    }
+
+    .link-arrow {
+        margin-left: 0; /* Center the button on smaller screens */
+        width: 100%;
+        text-align: center;
+    }
+}

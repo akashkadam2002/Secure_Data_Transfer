@@ -1,5 +1,173 @@
 {% extends 'main.html' %} {% block content %}
+<style>
+  /* General Styles */
+  body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f8f9fa;
+    color: #333;
+    margin: 0;
+    padding: 0;
+    line-height: 1.6;
+  }
 
+  .container {
+    margin: 1%;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 15px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  }
+
+  /* Buttons */
+  .btn-primary {
+    margin: 10px;
+    padding: 12px 24px;
+    font-size: 16px;
+    font-weight: 600;
+    background: linear-gradient(135deg, #6a11cb, #2575fc);
+    border: none;
+    border-radius: 30px;
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .btn-primary:hover {
+    background: linear-gradient(135deg, #2575fc, #6a11cb);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  }
+
+  /* Tables */
+  .table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin-top: 20px;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+    background-color: #ffffff;
+  }
+
+  .table th,
+  .table td {
+    padding: 15px;
+    text-align: center;
+    border: 1px solid #e9ecef;
+    width: 33.33%;
+    word-break: break-word;
+  }
+
+  .table th {
+    background: linear-gradient(135deg, #343a40, #2c3e50);
+    color: white;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .table tbody tr:nth-child(even) {
+    background-color: #f8f9fa;
+  }
+
+  .table tbody tr:hover {
+    background-color: #e9ecef;
+    transform: scale(1.02);
+    transition: transform 0.2s ease-in-out;
+  }
+
+  .table tbody tr {
+    transition: all 0.3s ease;
+  }
+
+  .table tbody tr:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+
+  .table tbody tr:hover td {
+    color: #007bff;
+  }
+
+  .table tbody tr td:first-child {
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+  }
+
+  .table tbody tr td:last-child {
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+  }
+
+  /* Headings and Text */
+  p {
+    font-size: 24px;
+    font-weight: 700;
+    color: #2c3e50;
+    margin-top: 20px;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    position: relative;
+  }
+
+  p::after {
+    content: '';
+    display: block;
+    width: 60px;
+    height: 4px;
+    background: linear-gradient(135deg, #6a11cb, #2575fc);
+    margin: 10px auto;
+    border-radius: 2px;
+  }
+
+  .receiver {
+    margin-top: 170px;
+  }
+
+  hr {
+    border: 1px solid #e9ecef;
+    margin: 20px 0;
+  }
+
+  /* Animations */
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .table,
+  .btn-primary,
+  p {
+    animation: fadeIn 0.8s ease-out;
+  }
+
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .btn-primary {
+      width: 100%;
+      margin: 10px 0;
+    }
+
+    .table {
+      display: block;
+      overflow-x: auto;
+    }
+
+    p {
+      font-size: 20px;
+    }
+  }
+</style>
 <div style="margin:1%">
   <hr>
   <div class="text-center">
@@ -9,9 +177,9 @@
   <hr>
 
   <!-- -----------SENT LOGS TABLE BEGINS---------------- -->
-  <p>Sent logs</p>
-  <table class="table table-bordered">
-    <thead class="thead-dark">
+  <p>Send Message's</p>
+  <table class="table">
+    <thead>
       <tr>
         <th>Sent Image</th>
         <th>Last modified</th>
@@ -20,33 +188,27 @@
     </thead>
     <tbody>
       {% for record in sent_records %}
-        {% if request.user == record.sender %}
-          <tr>
-            <td>{{ record.image_name }}</td>
-            <td>
-              <p>{{ record.updated | timesince}}</p>
-            </td>
-            <td>
-              <p>{{ record.receiver }}</p>
-            </td>
-          </tr>
-        {% endif %}
+      {% if request.user == record.sender %}
+      <tr>
+        <td>{{ record.image_name }}</td>
+        <td>{{ record.updated | timesince}}</td>
+        <td>{{ record.receiver }}</td>
+      </tr>
+      {% endif %}
       {% endfor %}
       {% if not records_found_s %}
-        <tr>
-          <td colspan="3">
-            <p>No records found</p>
-          </td>
-        </tr>
+      <tr>
+        <td colspan="3">No records found</td>
+      </tr>
       {% endif %}
     </tbody>
   </table>
   <!-- -----------SENT LOGS TABLE END---------------- -->
 
-  <!-- -----------REC LOGS TABLE END---------------- -->
-  <p>Receiver logs</p>
-  <table class="table table-bordered">
-    <thead class="thead-dark">
+  <!-- -----------RECEIVED LOGS TABLE BEGINS---------------- -->
+  <p class="receiver">Received Message's</p>
+  <table class="table">
+    <thead>
       <tr>
         <th>Received Image</th>
         <th>Last modified</th>
@@ -55,30 +217,23 @@
     </thead>
     <tbody>
       {% for record in receiver_records %}
-        {% if request.user == record.receiver %}
-          <tr>
-            <td>{{ record.image_name }}</td>
-            <td>
-              <p>{{ record.updated | timesince}}</p>
-            </td>
-            <td>
-              <p>{{ record.sender }}</p>
-            </td>
-          </tr>
-        {% endif %}
+      {% if request.user == record.receiver %}
+      <tr>
+        <td>{{ record.image_name }}</td>
+        <td>{{ record.updated | timesince}}</td>
+        <td>{{ record.sender }}</td>
+      </tr>
+      {% endif %}
       {% endfor %}
       {% if not records_found_r %}
-        <tr>
-          <td colspan="3">
-            <p>No records found</p>
-          </td>
-        </tr>
+      <tr>
+        <td colspan="3">No records found</td>
+      </tr>
       {% endif %}
     </tbody>
   </table>
-  
+  <!-- -----------RECEIVED LOGS TABLE END---------------- -->
 
-  <!-- -----------REC LOGS TABLE END---------------- -->
 </div>
 
 {% endblock content %}

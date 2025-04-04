@@ -1,43 +1,43 @@
 {% extends 'main.html' %} 
+{% load static %} <!-- Load the static template tag library -->
 
 {% block content %}
+<link rel="stylesheet" href="{% static 'styles/home.css' %}">
+
 <div class="card-container">
   <div class="main-card">
-    <h1 style="text-align: center;">WELCOME {{user.username}}</h1>
+    <h1>WELCOME, {{ user.username }}!</h1>
+    <p class="welcome-text">Experience the most secure and reliable communication platform, ensuring data protection and confidentiality at all levels.</p>
+    
     <div class="sub-cards">
       <div class="card-item">
-        <img
-          src="https://res.cloudinary.com/dzy2zn0mz/image/upload/v1698769947/SecurePixel/Images/card1.jpg"
-          alt="Secure Communication 1"
-        />
-        <br />
-        Ensure secure internal communication to protect sensitive company
-        information.
+          <img src="https://res.cloudinary.com/dzy2zn0mz/image/upload/v1698769947/SecurePixel/Images/card1.jpg" alt="Secure Communication 1" />
+          <h2>Internal Security</h2>
+          <p>Ensure secure internal communication to protect sensitive company information.  
+          Prevent unauthorized access, mitigate insider threats, and safeguard critical business operations through advanced encryption and secure channels.</p>
       </div>
       <div class="card-item">
-        <img
-          src="https://res.cloudinary.com/dzy2zn0mz/image/upload/v1698769945/SecurePixel/Images/card2.avif"
-          alt="Secure Communication 2"
-        />
-        <br />
-        Secure communication for classified government and military data.
+          <img src="https://res.cloudinary.com/dzy2zn0mz/image/upload/v1698769945/SecurePixel/Images/card2.avif" alt="Secure Communication 2" />
+          <h2>Government & Military</h2>
+          <p>Secure communication for classified government and military data.  
+          Utilize end-to-end encryption, secure networks, and multi-layer authentication to prevent cyber espionage, ensuring national security and operational integrity.</p>
       </div>
       <div class="card-item">
-        <img
-          src="https://res.cloudinary.com/dzy2zn0mz/image/upload/v1698769945/SecurePixel/Images/card3.jpg"
-          alt="Secure Communication 3"
-        />
-        <br />
-        Secure communication and data exchange in the supply chain to prevent
-        breaches or cyberattacks.
+          <img src="https://res.cloudinary.com/dzy2zn0mz/image/upload/v1698769945/SecurePixel/Images/card3.jpg" alt="Secure Communication 3" />
+          <h2>Supply Chain Security</h2>
+          <p>Ensure secure data exchange in the supply chain to prevent breaches and cyberattacks.  
+          Protect logistics networks from data leaks, unauthorized modifications, and cyber threats, ensuring seamless and secure global trade operations.</p>
       </div>
-    </div>
+  </div>
+  
 
-    {% if user.is_authenticated %}
-      <a style="margin-left: 35%; text-decoration: none;" href="{% url 'landing' %}" class="link-arrow font-reg">Get started <i style="margin-left: 38px;" class="fas fa-arrow-right"></i></a>
-    {% else %}
-      <a style="margin-left: 35%; text-decoration: none;" href="{% url 'sign-in' %}" class="link-arrow font-reg">Get started <i style="margin-left: 38px;" class="fas fa-arrow-right"></i></a>
-    {% endif %}
+    <div class="call-to-action">
+      {% if user.is_authenticated %}
+        <a href="{% url 'landing' %}" class="link-arrow">Get Started <i class="fas fa-arrow-right"></i></a>
+      {% else %}
+        <a href="{% url 'sign-in' %}" class="link-arrow">Get Started <i class="fas fa-arrow-right"></i></a>
+      {% endif %}
+    </div>
   </div>
 </div>
 {% endblock content %}
