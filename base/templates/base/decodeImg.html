@@ -1,4 +1,3 @@
-
 {% extends 'main.html' %}
 {% load static %}
 {% block content %}
@@ -18,7 +17,7 @@
   </div>
 
   <div class="content-grid">
-    <!-- Messages Section -->
+    <!-- Left: Messages Section -->
     <div class="messages-section">
       {% if steg_records %}
       <div class="messages-card">
@@ -48,6 +47,7 @@
                   <form method="post" action="{% url 'decode-img' %}" class="decode-form">
                     {% csrf_token %}
                     <input type="hidden" name="image_url" value="{{ record.encoded_img.url }}" />
+                    <input type="hidden" name="image_id" value="{{ record.id }}" />
                     <div class="password-input">
                       <i class="fas fa-lock"></i>
                       <input type="password" name="password" placeholder="Enter password" required />
@@ -71,7 +71,7 @@
       {% endif %}
     </div>
 
-    <!-- Results Section -->
+    <!-- Right: Decoded Message / Result Section -->
     <div class="results-section">
       <div class="results-card">
         {% if message %}
@@ -100,4 +100,3 @@
   </footer>
 </div>
 {% endblock content %}
-

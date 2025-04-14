@@ -21,5 +21,3 @@ class UserRegistration(models.Model):
 
 
 
-
-
